@@ -1,8 +1,8 @@
 package com.poppytait.bookingapi.repository;
 
 import com.poppytait.bookingapi.model.FitnessClass;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FitnessClassRepository extends CrudRepository<FitnessClass, Long> {
+public interface IFitnessClassRepository extends JpaRepository<FitnessClass, Long> {
 
 }

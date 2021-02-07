@@ -1,9 +1,16 @@
 package com.poppytait.bookingapi.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.Instant;
 
+@Entity
 public class FitnessClass {
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String instructor;
     private Instant startsAt;
@@ -11,8 +18,9 @@ public class FitnessClass {
     private String location;
     private int capacity;
 
-    public FitnessClass(long id, String name, String instructor, Instant startsAt, Instant endsAt, String location, int capacity) {
-        this.id = id;
+    public FitnessClass() {}
+
+    public FitnessClass(String name, String instructor, Instant startsAt, Instant endsAt, String location, int capacity) {
         this.name = name;
         this.instructor = instructor;
         this.startsAt = startsAt;

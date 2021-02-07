@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IFitnessClassService {
     List<FitnessClass> findAll();
+    FitnessClass add(FitnessClass fitnessClass);
 }

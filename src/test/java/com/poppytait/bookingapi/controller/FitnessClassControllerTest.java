@@ -24,17 +24,28 @@ class FitnessClassControllerTest {
     @InjectMocks
     FitnessClassController controller;
 
+    Instant instant = Instant.now();
+    FitnessClass fitnessClass = new FitnessClass("Body Pump", "Janine", instant, instant, "weights room", 12);
+
     @Test
     void shouldReturnFitnessClasses() {
         List<FitnessClass> classes = new ArrayList<>();
 
-        Instant instant = Instant.now();
-
-        classes.add(new FitnessClass(1234, "Body Pump", "Janine", instant, instant, "weights room", 12));
+        classes.add(fitnessClass);
 
         when(serviceMock.findAll()).thenReturn(classes);
 
         List<FitnessClass> fitnessClasses = controller.findFitnessClasses();
         assertEquals(classes, fitnessClasses);
+    }
+
+    @Test
+    void shouldAddFitnessClass() {
+
+        FitnessClass expectedClass = fitnessClass;
+
+        when(serviceMock.add(expectedClass)).thenReturn(expectedClass);
+        FitnessClass actualClass = controller.addFitnessClass(expectedClass);
+        assertEquals(expectedClass, actualClass);
     }
 }

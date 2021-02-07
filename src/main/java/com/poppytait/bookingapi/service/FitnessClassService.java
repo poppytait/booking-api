@@ -1,23 +1,26 @@
 package com.poppytait.bookingapi.service;
 
 import com.poppytait.bookingapi.model.FitnessClass;
+import com.poppytait.bookingapi.repository.IFitnessClassRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class FitnessClassService implements IFitnessClassService {
+    private IFitnessClassRepository repository;
+
+    public FitnessClassService(IFitnessClassRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<FitnessClass> findAll() {
-        List<FitnessClass> classes = new ArrayList<>();
+        return this.repository.findAll();
+    }
 
-        Instant instant = Instant.now();
-
-        classes.add(new FitnessClass(1234, "Body Pump", "Janine", instant, instant, "weights room", 12));
-
-        return classes;
+    @Override
+    public FitnessClass add(FitnessClass fitnessClass) {
+        return repository.save(fitnessClass);
     }
 }
