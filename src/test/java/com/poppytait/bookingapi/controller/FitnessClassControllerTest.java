@@ -1,5 +1,6 @@
 package com.poppytait.bookingapi.controller;
 
+import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
 import com.poppytait.bookingapi.model.FitnessClass;
 import com.poppytait.bookingapi.service.IFitnessClassService;
 import org.junit.jupiter.api.Test;
@@ -30,22 +31,29 @@ class FitnessClassControllerTest {
     @Test
     void shouldReturnFitnessClasses() {
         List<FitnessClass> classes = new ArrayList<>();
-
         classes.add(fitnessClass);
 
         when(serviceMock.findAll()).thenReturn(classes);
-
         List<FitnessClass> fitnessClasses = controller.findFitnessClasses();
         assertEquals(classes, fitnessClasses);
     }
 
     @Test
     void shouldAddFitnessClass() {
-
         FitnessClass expectedClass = fitnessClass;
 
         when(serviceMock.add(expectedClass)).thenReturn(expectedClass);
         FitnessClass actualClass = controller.addFitnessClass(expectedClass);
         assertEquals(expectedClass, actualClass);
     }
+
+    @Test
+    void shouldDeleteFitnessClass() throws FitnessClassNotFoundException {
+        Long expectedId = 1L;
+
+        when(serviceMock.delete(expectedId)).thenReturn(expectedId);
+        Long actualId = controller.deleteFitnessClass(expectedId);
+        assertEquals(expectedId, actualId);
+    }
+
 }
