@@ -3,6 +3,8 @@ package com.poppytait.bookingapi.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static com.poppytait.bookingapi.security.ApplicationUserRole.CUSTOMER;
-import static com.poppytait.bookingapi.security.ApplicationUserRole.INSTRUCTOR;
+import static com.poppytait.bookingapi.security.UserRole.CUSTOMER;
+import static com.poppytait.bookingapi.security.UserRole.INSTRUCTOR;
 
 @Configuration
 @EnableWebSecurity
@@ -40,13 +42,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .httpBasic();
+
+        http.headers().frameOptions().disable();
     }
 
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
         UserDetails beyonceKnowlesUser = User.builder()
-                .username("beyonceknowles")
+                .username("beyonce")
                 .password(passwordEncoder.encode("password"))
                // .roles(CUSTOMER.name())
                 .authorities(CUSTOMER.getGrantedAuthorities())
@@ -57,7 +61,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder.encode("password"))
               // .roles(INSTRUCTOR.name())
                 .authorities(INSTRUCTOR.getGrantedAuthorities())
-
                 .build();
 
 
@@ -65,5 +68,19 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 beyonceKnowlesUser,
                 lindaUser
         );
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder);
+
+        return authProvider;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
     }
 }

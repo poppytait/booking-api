@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 import static com.poppytait.bookingapi.security.ApplicationUserPermission.FITNESS_CLASS_READ;
 import static com.poppytait.bookingapi.security.ApplicationUserPermission.FITNESS_CLASS_WRITE;
 
-public enum ApplicationUserRole {
+public enum UserRole {
     CUSTOMER(new HashSet<>(Collections.singletonList(FITNESS_CLASS_READ))),
     INSTRUCTOR(new HashSet<>(Arrays.asList(FITNESS_CLASS_READ, FITNESS_CLASS_WRITE))),
     ;
 
     private final Set<ApplicationUserPermission> permissions;
 
-    ApplicationUserRole(Set<ApplicationUserPermission> permissions) {
+    UserRole(Set<ApplicationUserPermission> permissions) {
         this.permissions = permissions;
     }
 
