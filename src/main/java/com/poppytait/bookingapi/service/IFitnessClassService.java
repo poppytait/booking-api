@@ -8,6 +8,8 @@ import java.util.List;
 public interface IFitnessClassService {
     List<FitnessClass> findAll();
 
+    FitnessClass findById(Long id) throws FitnessClassNotFoundException;
+
     FitnessClass add(FitnessClass fitnessClass);
 
     Long delete(Long id) throws FitnessClassNotFoundException;

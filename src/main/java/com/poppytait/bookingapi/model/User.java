@@ -13,10 +13,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private final String username;
-    private final String password;
-    private final UserRole userRole;
+    private String username;
+    private String password;
+    private UserRole userRole;
 
+    public User() {}
 
     public User(String username, String password, UserRole userRole) {
         this.username = username;

@@ -6,7 +6,6 @@ import com.poppytait.bookingapi.repository.IFitnessClassRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FitnessClassService implements IFitnessClassService {
@@ -27,15 +26,16 @@ public class FitnessClassService implements IFitnessClassService {
     }
 
     @Override
+    public FitnessClass findById(Long id) throws FitnessClassNotFoundException {
+        return repository.findById(id)
+                .orElseThrow(() -> new FitnessClassNotFoundException("Fitness class with id: " + id + " not found"));
+    }
+
+    @Override
     public Long delete(Long id) throws FitnessClassNotFoundException {
-        Optional<FitnessClass> result = repository.findById(id);
+        Long resultId = findById(id).getId();
+        repository.deleteById(resultId);
 
-        if(result.isEmpty()) {
-            throw new FitnessClassNotFoundException("Fitness class with id: " + id + " not found");
-        } else {
-            repository.deleteById(id);
-            return id;
-        }
-
+        return resultId;
     }
 }
