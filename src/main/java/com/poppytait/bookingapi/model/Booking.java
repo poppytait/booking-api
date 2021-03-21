@@ -3,6 +3,9 @@ package com.poppytait.bookingapi.model;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"FITNESS_CLASS_ID", "USER_ID"})
+})
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

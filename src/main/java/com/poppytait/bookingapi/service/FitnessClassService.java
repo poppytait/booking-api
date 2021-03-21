@@ -28,7 +28,7 @@ public class FitnessClassService implements IFitnessClassService {
     @Override
     public FitnessClass findById(Long id) throws FitnessClassNotFoundException {
         return repository.findById(id)
-                .orElseThrow(() -> new FitnessClassNotFoundException("Fitness class with id: " + id + " not found"));
+                .orElseThrow(() -> new FitnessClassNotFoundException(id));
     }
 
     @Override
