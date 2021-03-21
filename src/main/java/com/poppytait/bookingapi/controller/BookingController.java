@@ -1,5 +1,6 @@
 package com.poppytait.bookingapi.controller;
 
+import com.poppytait.bookingapi.exception.DuplicateBookingException;
 import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
 import com.poppytait.bookingapi.exception.UserNotFoundException;
 import com.poppytait.bookingapi.model.Booking;
@@ -16,7 +17,7 @@ public class BookingController {
     private IBookingService service;
 
     @PostMapping("/{userId}/{fitnessClassId}")
-    public Booking addBooking(@PathVariable Long userId, @PathVariable Long fitnessClassId) throws FitnessClassNotFoundException, UserNotFoundException {
+    public Booking addBooking(@PathVariable Long userId, @PathVariable Long fitnessClassId) throws FitnessClassNotFoundException, UserNotFoundException, DuplicateBookingException {
         return service.addBooking(userId, fitnessClassId);
     }
 }

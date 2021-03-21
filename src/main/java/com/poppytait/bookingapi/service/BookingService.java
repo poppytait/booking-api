@@ -7,25 +7,24 @@ import com.poppytait.bookingapi.model.Booking;
 import com.poppytait.bookingapi.model.FitnessClass;
 import com.poppytait.bookingapi.model.User;
 import com.poppytait.bookingapi.repository.IBookingRepository;
-import com.poppytait.bookingapi.repository.IUserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BookingService implements IBookingService {
     private IBookingRepository bookingRepository;
-    private IUserRepository userRepository;
-    private FitnessClassService fitnessClassService;
+    private IUserService userService;
+    private IFitnessClassService fitnessClassService;
 
-    public BookingService(IBookingRepository bookingRepository, IUserRepository userRepository, FitnessClassService fitnessClassService){
+    public BookingService(IBookingRepository bookingRepository, IUserService userService, IFitnessClassService fitnessClassService){
         this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.fitnessClassService = fitnessClassService;
     }
 
     @Override
     public Booking addBooking(Long userId, Long fitnessClassId) throws FitnessClassNotFoundException, UserNotFoundException, DuplicateBookingException {
-        User user = findUserById(userId);
+        User user = userService.findById(userId);
         FitnessClass fitnessClass = fitnessClassService.findById(fitnessClassId);
 
         Booking booking = new Booking(fitnessClass, user);
@@ -35,10 +34,5 @@ public class BookingService implements IBookingService {
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateBookingException(userId, fitnessClassId);
         }
-    }
-
-    public User findUserById(Long userId) throws UserNotFoundException {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
