@@ -3,16 +3,14 @@ package com.poppytait.bookingapi.security;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.poppytait.bookingapi.security.ApplicationUserPermission.FITNESS_CLASS_READ;
-import static com.poppytait.bookingapi.security.ApplicationUserPermission.FITNESS_CLASS_WRITE;
+import static com.poppytait.bookingapi.security.ApplicationUserPermission.*;
 
 public enum UserRole {
-    CUSTOMER(new HashSet<>(Collections.singletonList(FITNESS_CLASS_READ))),
+    CUSTOMER(new HashSet<>(Arrays.asList(FITNESS_CLASS_READ, BOOKING_READ, BOOKING_WRITE))),
     INSTRUCTOR(new HashSet<>(Arrays.asList(FITNESS_CLASS_READ, FITNESS_CLASS_WRITE))),
     ;
 
