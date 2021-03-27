@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookingService implements IBookingService {
-    private IBookingRepository bookingRepository;
-    private IUserService userService;
-    private IFitnessClassService fitnessClassService;
+    private final IBookingRepository bookingRepository;
+    private final IUserService userService;
+    private final IFitnessClassService fitnessClassService;
 
-    public BookingService(IBookingRepository bookingRepository, IUserService userService, IFitnessClassService fitnessClassService){
+    public BookingService(IBookingRepository bookingRepository, IUserService userService, IFitnessClassService fitnessClassService) {
         this.bookingRepository = bookingRepository;
         this.userService = userService;
         this.fitnessClassService = fitnessClassService;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class FitnessClassService implements IFitnessClassService {
-    private IFitnessClassRepository repository;
+    private final IFitnessClassRepository repository;
 
     public FitnessClassService(IFitnessClassRepository repository) {
         this.repository = repository;

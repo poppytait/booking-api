@@ -3,7 +3,6 @@ package com.poppytait.bookingapi.controller;
 import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
 import com.poppytait.bookingapi.model.FitnessClass;
 import com.poppytait.bookingapi.service.IFitnessClassService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,11 @@ import java.util.List;
 @RequestMapping("classes")
 public class FitnessClassController {
 
-    @Autowired
-    private IFitnessClassService service;
+    private final IFitnessClassService service;
+
+    public FitnessClassController(IFitnessClassService service) {
+        this.service = service;
+    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('fitness-class:read')")

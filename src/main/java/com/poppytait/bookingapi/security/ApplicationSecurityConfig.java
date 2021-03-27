@@ -1,6 +1,5 @@
 package com.poppytait.bookingapi.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -25,7 +24,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder){
         this.passwordEncoder = passwordEncoder;
     }

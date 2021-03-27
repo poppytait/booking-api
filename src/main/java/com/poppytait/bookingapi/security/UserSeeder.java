@@ -2,7 +2,6 @@ package com.poppytait.bookingapi.security;
 
 import com.poppytait.bookingapi.model.User;
 import com.poppytait.bookingapi.repository.IUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,12 +11,11 @@ import org.springframework.stereotype.Component;
 class UserSeeder implements ApplicationListener<ApplicationReadyEvent> {
 
     private final PasswordEncoder passwordEncoder;
+    private final IUserRepository userRepository;
 
-    @Autowired
-    IUserRepository userRepository;
-
-    UserSeeder(PasswordEncoder passwordEncoder) {
+    UserSeeder(PasswordEncoder passwordEncoder, IUserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     @Override
