@@ -5,10 +5,9 @@ import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
 import com.poppytait.bookingapi.exception.UserNotFoundException;
 import com.poppytait.bookingapi.model.Booking;
 import com.poppytait.bookingapi.service.IBookingService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("booking")
@@ -24,5 +23,10 @@ public class BookingController {
     @PostMapping("/{userId}/{fitnessClassId}")
     public Booking addBooking(@PathVariable Long userId, @PathVariable Long fitnessClassId) throws FitnessClassNotFoundException, UserNotFoundException, DuplicateBookingException {
         return service.addBooking(userId, fitnessClassId);
+    }
+
+    @GetMapping("/{userId}")
+    public List<Booking> getBookings(@PathVariable Long userId) throws UserNotFoundException {
+        return service.getBookings(userId);
     }
 }

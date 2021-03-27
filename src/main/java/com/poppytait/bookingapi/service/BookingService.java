@@ -10,6 +10,8 @@ import com.poppytait.bookingapi.repository.IBookingRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookingService implements IBookingService {
     private final IBookingRepository bookingRepository;
@@ -34,5 +36,11 @@ public class BookingService implements IBookingService {
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateBookingException(userId, fitnessClassId);
         }
+    }
+
+    @Override
+    public List<Booking> getBookings(Long userId) throws UserNotFoundException {
+        User user = userService.findById(userId);
+        return bookingRepository.findByUserId(user.getId());
     }
 }
