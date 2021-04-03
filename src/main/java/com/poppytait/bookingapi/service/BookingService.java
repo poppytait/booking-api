@@ -1,5 +1,6 @@
 package com.poppytait.bookingapi.service;
 
+import com.poppytait.bookingapi.exception.BookingNotFoundException;
 import com.poppytait.bookingapi.exception.DuplicateBookingException;
 import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
 import com.poppytait.bookingapi.exception.UserNotFoundException;
@@ -42,5 +43,19 @@ public class BookingService implements IBookingService {
     public List<Booking> getBookings(Long userId) throws UserNotFoundException {
         User user = userService.findById(userId);
         return bookingRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public Long cancelBooking(Long id) throws BookingNotFoundException {
+        Booking foundBooking = findById(id);
+        Long foundBookingId = foundBooking.getId();
+        bookingRepository.deleteById(foundBookingId);
+
+        return foundBookingId;
+    }
+
+    private Booking findById(Long id) throws BookingNotFoundException {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException(id));
     }
 }

@@ -1,5 +1,6 @@
 package com.poppytait.bookingapi.controller;
 
+import com.poppytait.bookingapi.exception.BookingNotFoundException;
 import com.poppytait.bookingapi.exception.DuplicateBookingException;
 import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
 import com.poppytait.bookingapi.exception.UserNotFoundException;
@@ -31,5 +32,11 @@ public class BookingController {
     @PreAuthorize("hasAuthority('booking:read')")
     public List<Booking> getBookings(@PathVariable Long userId) throws UserNotFoundException {
         return service.getBookings(userId);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('booking:write')")
+    public Long cancelBooking(@PathVariable Long id) throws BookingNotFoundException {
+        return service.cancelBooking(id);
     }
 }
