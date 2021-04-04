@@ -1,59 +1,98 @@
 package com.poppytait.bookingapi.controller;
 
-import com.poppytait.bookingapi.exception.FitnessClassNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.poppytait.bookingapi.config.ApplicationConfig;
 import com.poppytait.bookingapi.model.FitnessClass;
-import com.poppytait.bookingapi.service.IFitnessClassService;
+import com.poppytait.bookingapi.repository.IFitnessClassRepository;
+import com.poppytait.bookingapi.security.UserRole;
+import com.poppytait.bookingapi.util.ResourceReader;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { ApplicationConfig.class })
+@WebAppConfiguration
 class FitnessClassControllerTest {
 
-    @Mock
-    IFitnessClassService service;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
-    @InjectMocks
-    FitnessClassController controller;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    Instant instant = Instant.now();
-    FitnessClass fitnessClass = new FitnessClass("Body Pump", "Janine", instant, instant, "weights room", 12);
+    private MockMvc mockMvc;
+
+    @MockBean
+    private IFitnessClassRepository fitnessClassRepository;
+
+    Instant instant = Instant.parse("2021-04-04T10:37:30.00Z");
+    FitnessClass fitnessClass = new FitnessClass(1L,"Body Pump", "Janine", instant, instant, "weights room", 12);
+
+    @BeforeEach
+    public void setup() {
+        System.out.println();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).apply(springSecurity()).build();
+    }
 
     @Test
-    void shouldReturnFitnessClasses() {
+    void shouldReturnFitnessClasses() throws Exception {
         List<FitnessClass> classes = new ArrayList<>();
         classes.add(fitnessClass);
 
-        when(service.findAll()).thenReturn(classes); // Expectation
-        List<FitnessClass> fitnessClasses = controller.findFitnessClasses(); // Invocation
-        assertEquals(classes, fitnessClasses); // Assertion
+        when(fitnessClassRepository.findAll()).thenReturn(classes);
+        String expectedResponse = ResourceReader.readFileToString("get-fitness-classes.json");
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/classes")
+                .with(user("beyonce").authorities(UserRole.CUSTOMER.getGrantedAuthorities())))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
     }
 
     @Test
-    void shouldAddFitnessClass() {
-        FitnessClass expectedClass = fitnessClass;
+    void shouldAddFitnessClass() throws Exception {
+        when(fitnessClassRepository.save(any(FitnessClass.class))).thenReturn(fitnessClass);
+        String expectedResponse = ResourceReader.readFileToString("add-fitness-class.json");
 
-        when(service.add(expectedClass)).thenReturn(expectedClass);
-        FitnessClass actualClass = controller.addFitnessClass(expectedClass);
-        assertEquals(expectedClass, actualClass);
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/classes")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(fitnessClass))
+                .with(user("linda").authorities(UserRole.INSTRUCTOR.getGrantedAuthorities())))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
     }
 
     @Test
-    void shouldDeleteFitnessClass() throws FitnessClassNotFoundException {
-        Long expectedId = 1L;
+    void shouldDeleteFitnessClass() throws Exception {
+        when(fitnessClassRepository.findById(1L)).thenReturn(Optional.of(fitnessClass));
+        String expectedResponse = ResourceReader.readFileToString("delete-fitness-class.json");
 
-        when(service.delete(expectedId)).thenReturn(expectedId);
-        Long actualId = controller.deleteFitnessClass(expectedId);
-        assertEquals(expectedId, actualId);
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/classes/1")
+                .with(user("linda").authorities(UserRole.INSTRUCTOR.getGrantedAuthorities())))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
     }
-
 }
