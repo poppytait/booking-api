@@ -22,6 +22,12 @@ public class Booking {
         this.user = user;
     }
 
+    public Booking(Long id, FitnessClass fitnessClass, User user) {
+        this.id = id;
+        this.fitnessClass = fitnessClass;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("booking")
-
 public class BookingController {
 
     private final IBookingService service;

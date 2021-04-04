@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 class FitnessClassControllerTest {
 
     @Mock
-    IFitnessClassService serviceMock;
+    IFitnessClassService service;
 
     @InjectMocks
     FitnessClassController controller;
@@ -33,16 +33,16 @@ class FitnessClassControllerTest {
         List<FitnessClass> classes = new ArrayList<>();
         classes.add(fitnessClass);
 
-        when(serviceMock.findAll()).thenReturn(classes);
-        List<FitnessClass> fitnessClasses = controller.findFitnessClasses();
-        assertEquals(classes, fitnessClasses);
+        when(service.findAll()).thenReturn(classes); // Expectation
+        List<FitnessClass> fitnessClasses = controller.findFitnessClasses(); // Invocation
+        assertEquals(classes, fitnessClasses); // Assertion
     }
 
     @Test
     void shouldAddFitnessClass() {
         FitnessClass expectedClass = fitnessClass;
 
-        when(serviceMock.add(expectedClass)).thenReturn(expectedClass);
+        when(service.add(expectedClass)).thenReturn(expectedClass);
         FitnessClass actualClass = controller.addFitnessClass(expectedClass);
         assertEquals(expectedClass, actualClass);
     }
@@ -51,7 +51,7 @@ class FitnessClassControllerTest {
     void shouldDeleteFitnessClass() throws FitnessClassNotFoundException {
         Long expectedId = 1L;
 
-        when(serviceMock.delete(expectedId)).thenReturn(expectedId);
+        when(service.delete(expectedId)).thenReturn(expectedId);
         Long actualId = controller.deleteFitnessClass(expectedId);
         assertEquals(expectedId, actualId);
     }

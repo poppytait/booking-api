@@ -29,6 +29,16 @@ public class FitnessClass {
         this.capacity = capacity;
     }
 
+    public FitnessClass(Long id, String name, String instructor, Instant startsAt, Instant endsAt, String location, int capacity) {
+        this.id = id;
+        this.name = name;
+        this.instructor = instructor;
+        this.startsAt = startsAt;
+        this.endsAt = endsAt;
+        this.location = location;
+        this.capacity = capacity;
+    }
+
     public long getId() {
         return id;
     }
