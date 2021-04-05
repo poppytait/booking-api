@@ -4,29 +4,28 @@ import com.poppytait.bookingapi.model.User;
 import com.poppytait.bookingapi.repository.IUserRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import static com.poppytait.bookingapi.constants.SeedUsers.KYLE;
+import static com.poppytait.bookingapi.constants.SeedUsers.LINDA;
 
 @Component
 class UserSeeder implements ApplicationListener<ApplicationReadyEvent> {
 
-    private final PasswordEncoder passwordEncoder;
     private final IUserRepository userRepository;
 
-    UserSeeder(PasswordEncoder passwordEncoder, IUserRepository userRepository) {
-        this.passwordEncoder = passwordEncoder;
+    UserSeeder(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        createUserWithRole("beyonce", "password", UserRole.CUSTOMER);
-        createUserWithRole("linda", "password", UserRole.INSTRUCTOR);
+        createUserWithRole(KYLE);
+        createUserWithRole(LINDA);
     }
 
-    private void createUserWithRole(String username, String password, UserRole role){
-        if(userRepository.findUserByUsername(username).isEmpty()){
-            User user = new User(username, passwordEncoder.encode(password), role);
+    private void createUserWithRole(User user){
+        if(userRepository.findUserByUsername(user.getUsername()).isEmpty()){
             userRepository.save(user);
         }
     }

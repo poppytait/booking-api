@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static com.poppytait.bookingapi.security.UserRole.CUSTOMER;
-import static com.poppytait.bookingapi.security.UserRole.INSTRUCTOR;
+import static com.poppytait.bookingapi.constants.SeedUsers.KYLE;
+import static com.poppytait.bookingapi.constants.SeedUsers.LINDA;
 
 @Configuration
 @EnableWebSecurity
@@ -47,23 +47,21 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails beyonceKnowlesUser = User.builder()
-                .username("beyonce")
-                .password(passwordEncoder.encode("password"))
-               // .roles(CUSTOMER.name())
-                .authorities(CUSTOMER.getGrantedAuthorities())
+        UserDetails kyleUser = User.builder()
+                .username(KYLE.getUsername())
+                .password(KYLE.getPassword())
+                .authorities(KYLE.getRole().getGrantedAuthorities())
                 .build();
 
         UserDetails lindaUser = User.builder()
-                .username("linda")
-                .password(passwordEncoder.encode("password"))
-              // .roles(INSTRUCTOR.name())
-                .authorities(INSTRUCTOR.getGrantedAuthorities())
+                .username(LINDA.getUsername())
+                .password(LINDA.getPassword())
+                .authorities(LINDA.getRole().getGrantedAuthorities())
                 .build();
 
 
         return new InMemoryUserDetailsManager(
-                beyonceKnowlesUser,
+                kyleUser,
                 lindaUser
         );
     }

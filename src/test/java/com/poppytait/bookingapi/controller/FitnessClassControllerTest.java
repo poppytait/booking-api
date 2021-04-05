@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poppytait.bookingapi.config.ApplicationConfig;
 import com.poppytait.bookingapi.model.FitnessClass;
 import com.poppytait.bookingapi.repository.IFitnessClassRepository;
-import com.poppytait.bookingapi.security.UserRole;
 import com.poppytait.bookingapi.util.ResourceReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.poppytait.bookingapi.constants.SeedUsers.KYLE;
+import static com.poppytait.bookingapi.constants.SeedUsers.LINDA;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -67,7 +68,7 @@ class FitnessClassControllerTest {
         String expectedResponse = ResourceReader.readFileToString("get-fitness-classes.json");
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/classes")
-                .with(user("beyonce").authorities(UserRole.CUSTOMER.getGrantedAuthorities())))
+                .with(user(KYLE.getUsername()).authorities(KYLE.getRole().getGrantedAuthorities())))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
@@ -80,7 +81,7 @@ class FitnessClassControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/classes")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(fitnessClass))
-                .with(user("linda").authorities(UserRole.INSTRUCTOR.getGrantedAuthorities())))
+                .with(user(LINDA.getUsername()).authorities(LINDA.getRole().getGrantedAuthorities())))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
@@ -91,7 +92,7 @@ class FitnessClassControllerTest {
         String expectedResponse = ResourceReader.readFileToString("delete-fitness-class.json");
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/classes/1")
-                .with(user("linda").authorities(UserRole.INSTRUCTOR.getGrantedAuthorities())))
+                .with(user(LINDA.getUsername()).authorities(LINDA.getRole().getGrantedAuthorities())))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
