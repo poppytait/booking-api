@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3,
+    "fitnessClass": {
+      "id": 1,
+      "name": "Pilates",
+      "instructor": "Benny Johnson",
+      "startsAt": "2017-02-03T11:25:00Z",
+      "endsAt": "2017-02-03T12:25:00Z",
+      "location": "Yoga studio",
+      "capacity": 12
+    },
+    "user": {
+      "id": 2,
+      "username": "kyle",
+      "password": "$2a$10$JNJy/WGkLhFnqKPy9FWdPub3e/tkvdsVMWnZ.BDeoGeKC4KzcIOZi",
+      "role": "CUSTOMER"
+    }
+  }
+]
